@@ -1,0 +1,19 @@
+@startuml
+
+title Classes - Class Diagram
+
+
+class Farola {
+  -estado: boolean
+  +<<create>> Farola()
+  +pairWithNeighbor(Farola otraFarola)
+  +getNeighbors(): Farola[*]
+  +turnOn()
+  +turnOf()
+  +isOn(): boolean 
+  +agregarFarola()
+}
+
+Farola --> "0..*" Farola: neighbors
+
+@enduml

@@ -1,0 +1,97 @@
+@startuml
+
+title Mercado de Objetos - Class Diagram
+
+class Ecommerce {
+  +registrarVendedor(String nombre, String direccion): Vendedor
+  +buscarVendedor(String nombre): Vendedor
+  +registrarCliente(String nombre, String direccion): Cliente
+  +buscarCliente(String nombre): Cliente
+  +ponerProductoEnVenta(String nombre, String descripcion, Real precio, Integer unidades, Vendedor vendedor): Producto
+  +buscarProducto(String nombre): Producto[*]
+  +crearPedido(Cliente cliente, Producto producto, Integer unidadesProducto, FormaDePago pago, MecanismoDeEnvio envio): Pedido
+  +costoTotalDeUnPedido(Pedido pedido): Real
+}
+
+class Usuario {
+  -nombre: String
+  -direccion: String
+
+  +nombreEsIgualA(String nombre): Boolean
+}
+
+class Vendedor {
+  +agregarProducto(Producto producto): Real
+  +buscarProducto(String nombre): Producto[*]
+}
+
+class Cliente {
+  +agregarPedido(Pedido pedido): Real
+}
+
+class Producto {
+  -nombre: String
+  -descripcion: String
+  -precio: Real
+  -unidades: Real
+
+  +nombreEsIgualA(String nombre): Boolean
+  +abastece(Integer cantidadSolicitada): Boolean
+  +actualizarUnidades(Integer cantidadSolicitada)
+}
+
+class Pedido {  
+  -cantidadSolicitada: Integer
+  
+  +costoTotal(): Real
+}
+
+abstract FormaDePago {
+  +{abstract} precioFinal(): Real
+}
+
+class PagoAlContado {
+
+}
+
+class Pago6Cuotas {
+
+}
+
+abstract MecanismoDeEnvio {
+  +{abstract} costo(): Real
+}
+
+class RetirarEnComercio {
+
+}
+
+class RetirarEnSucursal {
+  
+}
+
+class EnvioExpres {
+  
+}
+
+class Mapa {
+  +distanciaEntre(String direccionVendedor, String direccionCliente): Real
+}
+
+Ecommerce --> "0..*" Vendedor: vendedores
+Ecommerce --> "0..*" Cliente: clientes
+Vendedor --> "0..*" Producto: productos
+Cliente --> "0..*" Pedido: pedidos
+RetirarEnComercio ..|> MecanismoDeEnvio
+RetirarEnSucursal ..|> MecanismoDeEnvio
+EnvioExpres ..|> MecanismoDeEnvio 
+PagoAlContado ..|> FormaDePago
+Pago6Cuotas ..|> FormaDePago 
+Pedido <--> FormaDePago
+Pedido --> Producto
+Pedido --> MecanismoDeEnvio
+MecanismoDeEnvio --> Mapa
+MecanismoDeEnvio --> Cliente
+MecanismoDeEnvio --> Vendedor
+Vendedor --> Usuario
+Vendedor --> Cliente

@@ -1,0 +1,73 @@
+@startuml
+
+title Classes - Class Diagram
+
+class ServicioTelefonico {
+  -numerosTelefonicos: Set<String> 
+  +agregarNumero(String numero)
+  +registrarPersonaFisica(String nombre, String direccion, Integer dni): Cliente
+  +registrarPersonaJuridica(String nombre, String direccion, Integer cuit, String tipo): Cliente
+  +registrarLlamadaLocal(Date fechaYHora, Real duracion, String numeroEmisor, String numeroReceptor): Llamada
+  +registrarLlamadaInterurbana(Date fechaYHora, Integer duracion, String numeroEmisor, String numeroReceptor, 
+  Real distancia): Llamada
+  +registrarLlamadaInternacional(Date fechaYHora, Real duracion, String numeroEmisor, String numeroReceptor, 
+  String paisOrigen, String paisDestino): Llamada  
+  +facturarLlamadas(Cliente cliente, Date fechaInicio, Date fechaFin): Factura
+}
+
+abstract Cliente {
+  -nombre: String
+  -direccion: String 
+  +registrarLlamadaLocal(Date fechaYHora, Real duracion, String numeroEmisor, String numeroReceptor): Llamada
+  +registrarLlamadaInterurbana(Date fechaYHora, Integer duracion, String numeroEmisor, String numeroReceptor, 
+  Real distancia): Llamada
+  +registrarLlamadaInternacional(Date fechaYHora, Real duracion, String numeroEmisor, String numeroReceptor, 
+  String paisOrigen, String paisDestino): Llamada  
+  +facturarLlamadasCliente(Cliente cliente, Date fechaInicio, Date fechaFin): Factura
+}
+
+class PersonaFisica {
+  -dni: Integer
+}
+
+class PersonaJuridica {
+  -cuit: String
+  -tipo: String  
+}
+
+abstract Llamada {
+  -fechaYHora: Date
+  -duracion: Real 
+  -numeroEmisor: String 
+  -numeroReceptor: String
+}
+
+class LlamadaLocal {
+}
+
+class LlamadaInterurbana {
+  -distancia: Real 
+}
+
+class LlamadaInternacional {
+  -paisOrigen: String
+  -paisDestino: String 
+}
+
+class Factura {
+  -fecha: Date;
+  -fechaInicio: Date;
+  -fechaFin: Date;
+  -montoTotal: Real;
+}
+
+ServicioTelefonico --> "0..*" Cliente: clientes
+Cliente --> "0..*" Llamada: llamadas
+PersonaFisica --|> Cliente
+PersonaJuridica --|> Cliente   
+LlamadaLocal --|>  Llamada
+LlamadaInterurbana --|>  Llamada
+LlamadaInternacional --|>  Llamada
+Factura --> Cliente
+
+@enduml

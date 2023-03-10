@@ -1,0 +1,20 @@
+package ar.edu.unlp.objetos.uno.Ejerciocio17_FacturaciondeLlamadas;
+
+import java.time.LocalDate;
+
+public class Factura {
+
+	private LocalDate periodo;
+	private LocalDate fecha;
+	private LocalDate fechaeEmision;
+	private Persona cliente;
+	private double monto;
+	
+	public Factura(LocalDate periodo, LocalDate fecha, LocalDate fechaeEmision, double monto, Persona cliente) {
+		this.periodo = periodo;
+		this.fecha = fecha;
+		this.fechaeEmision = fechaeEmision;
+		this.monto = monto;
+		this.cliente = cliente;
+	}
+}

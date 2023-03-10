@@ -1,0 +1,56 @@
+@startuml
+
+title Sistema de Exportación - Class Diagram
+
+class SistemaDeExportacion {
+  +registrarPedido(String destino, Date fechaExportacion, String nombreEmpresa): Pedido
+  +agregarProductos(Pedido pedido, String descripcion, Integer unidades, Real pesoUnidad, Real valorUnidad)
+  +agregarServicios(Pedido pedido, String descripcion, Integer unidades, Real costoMateriales, Real manoDeObra)
+  +facturarPedido(Pedido pedido): Factura
+  +facturaMayorCostoFinal(Datlapse periodo): Factura
+}
+
+class Pedido {
+  -destino: String
+  -fechaExportacion: Date
+  -nombreEmpresa: String
+
+}
+
+interface Item {
+  +costo(): Real
+}
+
+class Producto {
+  -descripcion: String
+  -unidades: Integer
+  -pesoUnidad: Real
+  -valorUnidad: Real
+
+  +costo(): Real
+}
+
+class Servicio {
+  -descripcion: String
+  -costoMateriales: Real
+  -manoDeObra: Real
+
+  +costo(): Real
+}
+
+class Factura {
+  -fecha: Date
+  -fechaExportacion: Date
+
+  +costoBasico(): Real
+  +costoExportacion(): Real
+  +costoFinal(): Real
+}
+
+SistemaDeExportacion --> "0..*" Factura: facturas
+SistemaDeExportacion --> "0..*" Pedido: pedidos
+Pedido --> "0..*" Item: items 
+Producto --|> Item
+Servicio --|> Item
+
+@enduml

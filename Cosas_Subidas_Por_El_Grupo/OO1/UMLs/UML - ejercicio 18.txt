@@ -1,0 +1,58 @@
+@startuml
+
+title Liquidadora de Haberes - Class Diagram
+
+class Liquidadora {
+  +registrarEmpleado(String nombre, String apellido, String cuil, Date fechaNacimiento, Boolean tieneConyuge, Boolean tieneHijos)
+  +buscarEmpleado(String cuil): Empleado
+  +eliminarEmpleado(Empleado empleado)
+  +cargarContratoPorHoras(Empleado empleado, Date fechaInicio, Date fechaFin, Real valorHora, Real horas)
+  +cargarContratoDePlanta(Empleado empleado, Date fechaInicio, Real sueldo, Real montoConyuge, Real montoHijos)
+  +obtenerEmpleadosContratosVencidos(): Empleado[*]
+  +generarRecibos(): ReciboDeSueldo[*]
+}
+
+class Empleado {
+  -nombre: String
+  -apellido: String
+  -cuil: String
+  -fechaNacimiento: Date
+  -tieneConyuge: Boolean
+  -tieneHijos: Boolean
+}
+
+Class ReciboDeSueldo {
+  -antiguedad: Integer
+  -fecha: Date
+  -montoTotal: Real
+}
+
+abstract Contrato {
+  -fechaInicio: Date 
+
+  +{abstract} montoACobrar(): Real
+}
+
+class ContratoPorHoras {
+  -fechaFin: Date
+  -valorHora: Real
+  -horas: Real
+
+  +montoACobrar(): Real
+}
+
+class ContratoDePlanta {
+  -sueldo: Real
+  -montoConyuge: Real
+  -montoHijos: Real
+
+  +montoACobrar(): Real
+}
+
+Liquidadora --> "0..*" Empleado: empleados
+Empleado --> "0..*" Contrato: contratos
+ReciboDeSueldo --> Empleado 
+ContratoPorHoras --|> Contrato
+ContratoDePlanta --|> Contrato
+
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+
+title Farolas con focos - Class Diagram
+
+class Farola {
+  -estado: boolean
+  +<<create>> Farola(String fabricante, int cantidadDeCiclos)
+  +pairWithNeighbor(Farola otraFarola)
+  +getNeighbors(): Farola[*]
+  +turnOn()
+  +turnOf()
+  +isOn(): boolean
+  +farolasConFocosVencidos(): Farola[*] 
+  +addNeighbor()
+}
+
+Class Foco {
+  -fabricante: String
+  -cantidadDeCiclos: Integer
+
+  +descontarCantidadDeCiclos()
+  +estaVencido(): Boolean
+}
+
+Farola --> "0..*" Farola: neighbors
+Farola --> Foco
+
+@enduml

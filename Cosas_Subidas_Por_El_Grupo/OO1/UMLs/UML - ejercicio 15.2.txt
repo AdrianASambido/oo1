@@ -1,0 +1,61 @@
+@startuml
+
+title Classes - Class Diagram
+
+class ServicioDePropiedades {
+  +registrarPropiedad(String nombre, String descripcion, Real precioNoche, Usuario usuario): Propiedad
+  +buscarPropiedadesDisponibles(DateLapse periodo): Propiedad[*]
+  +reservar(Propiedad propiedad, DateLapse periodo, Usuario usuario): Reserva
+  +eliminarReserva(Reserva reserva)
+  +obtenerReservasUsuario(Usuario usuario): Reserva[*]
+  +ingresosPropietario(Usuario usuario, DateLapse periodo): Real
+}
+
+class ServicioDeUsuarios {
+  +registrarUsuario(String nombre, String direccion, Integer dni): Usuario
+}
+
+class Usuario {
+  -nombre: String
+  -direccion: String 
+  -dni: Integer
+}
+
+class Propiedad {
+  -nombre: String
+  -descripcion: String
+  -precioNoche: Real  
+  -direccion: String 
+  +estaDisponible(): Boolean
+  +obtenerReservasUsuario(Usuario usuario): Reserva[*]
+  +ingresosPropietario(Usuario usuario, DateLapse periodo): Real
+}
+
+class Reserva {
+  +overlaps(): Boolean 
+  +incluye(): Boolean
+  +cantidadNoches(): Real
+  +precio(): Real
+  +fechaInicio(): Date
+  +usuarioEsIgualA(): Boolean
+}
+
+class DateLapse {
+  -from: Date
+  -to: Date
+  +getFrom(): Date
+  +getTo(): Date
+  +sizeInDays(): Integer
+  +includesDate(LocalDate other): Boolean
+  +overlaps(DateLapse anotherDateLapse): Boolean
+}
+
+ServicioDeUsuarios --> "0..*" Usuario: usuarios
+ServicioDePropiedades --> "0..*" Propiedad: propiedades
+Reserva --> "1" DateLapse: periodo
+Propiedad --> "0..*" Reserva: reservas
+Propiedad --> "1" Usuario: Propietario 
+Reserva --> "1" Usuario
+Reserva --> "1" Propiedad
+
+@enduml

@@ -1,0 +1,75 @@
+@startuml
+
+title Classes - Class Diagram
+
+class SistemaAirbnb {
+  +registrarUsuario(String nombre, String direccion, Integer dni): Usuario
+  +registrarPropiedad(String nombre, String descripcion, Real precioNoche, Usuario usuario): Propiedad
+  +buscarPropiedadesDisponibles(DateLapse periodo): Propiedad[*]
+  +reservar(Propiedad propiedad, DateLapse periodo, Usuario usuario): Reserva
+  +precioReserva(Reserva reserva): Real
+  +eliminarReserva(Reserva reserva)
+  +obtenerReservasUsuario(Usuario usuario): Reserva[*]
+  +ingresosDeUnPropietario(Usuario usuario, DateLapse periodo): Real
+}
+
+class Usuario {
+  -nombre: String
+  -direccion: String 
+  -dni: Integer
+  +buscarPropiedadesDisponibles(DateLapse periodo): Propiedad[*]
+  +ingresosPeriodo(DateLapse periodo): Boolean
+}
+
+class Propiedad {
+  -nombre: String
+  -descripcion: String
+  -precioNoche: Real  
+  -direccion: String 
+  +estaDisponible(): Boolean
+  +montoTotalAlquiler(): Real
+}
+
+interface IPoliticaCancelacion {
+  reembolsar(Reserva reserva, LocalDate fecha): Real 
+}
+
+class PoliticaFlexible {
+   reembolsar(Reserva reserva, LocalDate fecha): Real 
+}
+
+class PoliticaModerada {
+   reembolsar(Reserva reserva, LocalDate fecha): Real 
+}
+
+class PoliticaEstricta {
+  reembolsar(): Real
+}
+
+class Reserva {
+  +incluye(): Boolean
+  +precio(): Real
+  +eliminarse()
+}
+
+class DateLapse {
+  -from: Date
+  -to: Date
+  +getFrom(): Date
+  +getTo(): Date
+  +sizeInDays(): Integer
+  +includesDate(LocalDate other): Boolean
+  +overlaps(DateLapse anotherDateLapse): Boolean
+}
+
+SistemaAirbnb --> "0..*" Usuario: usuarios
+Usuario --> "0..*" Propiedad: propiedades
+Usuario --> "0..*" Reserva: reservas
+Reserva --> "1" DateLapse: periodo
+Propiedad <--> "0..*" Reserva: reservas
+Propiedad --> "1" IPoliticaCancelacion: politica
+Flexible ..|>  IPoliticaCancelacion
+Moderada ..|>  IPoliticaCancelacion
+Estricta ..|>  IPoliticaCancelacion 
+
+@enduml
